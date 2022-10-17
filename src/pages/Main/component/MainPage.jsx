@@ -5,6 +5,7 @@ const MainPage = () => {
   const timeArray = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
   const [time, setTime] = useState(new Date());
+  const [showToolTip, setShowToolTip] = useState(false);
 
   const refreshClock = () => {
     setTime(new Date());
@@ -17,17 +18,20 @@ const MainPage = () => {
     };
   }, []);
 
-  console.log("time", time);
   return (
     <Wrapper>
-      <ClockCircle>
+      <ClockCircle
+        onMouseEnter={() => setShowToolTip(true)}
+        onMouseLeave={() => setShowToolTip(false)}
+      >
         {timeArray.map((time, key) => {
-          return <TimeNumber id={key}>{time}</TimeNumber>;
+          return <TimeNumber key={key}>{time}</TimeNumber>;
         })}
         <Circle />
         <HourLine time={time} />
         <MinuteLine time={time} />
-        {/* <ToolTip>{time}</ToolTip> */}
+        <SecondLine time={time} />
+        {showToolTip && <ToolTip>{time}</ToolTip>}
       </ClockCircle>
     </Wrapper>
   );
@@ -127,22 +131,23 @@ const TimeNumber = styled.div`
 
 const Circle = styled.div`
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background-color: orange;
   left: 50%;
   top: 50%;
-  z-index: 2;
+  z-index: 10;
 `;
 
 const HourLine = styled.div`
   position: absolute;
   width: 8px;
-  height: 50px;
+  height: 60px;
   background-color: black;
-  top: 45%;
-  left: 60%;
+  transform-origin: bottom;
+  top: 40%;
+  left: 50%;
   transform: rotateZ(${(props) => props.time?.getHours() * 30}deg);
 `;
 
@@ -151,13 +156,26 @@ const MinuteLine = styled.div`
   width: 7px;
   height: 100px;
   background-color: black;
-  top: 35%;
-  left: 35%;
+  transform-origin: bottom;
+  bottom: 50%;
+  left: 50%;
   transform: rotateZ(${(props) => props.time?.getMinutes() * 6}deg);
 `;
 
-// const ToolTip = styled.div`
-//   position: absolute;
-//   width: 50px;
-//   height: 100px;
-// `;
+const SecondLine = styled.div`
+  position: absolute;
+  width: 2px;
+  height: 37%;
+  z-index: 2;
+  background-color: #87e4eb;
+  left: 50%;
+  bottom: 50%;
+  transform-origin: bottom;
+  transform: rotateZ(${(props) => props.time?.getSeconds() * 6}deg);
+`;
+
+const ToolTip = styled.div`
+  position: absolute;
+  width: 50px;
+  height: 100px;
+`;
