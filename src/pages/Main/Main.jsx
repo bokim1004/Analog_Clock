@@ -1,5 +1,5 @@
 import React from "react";
-import { MainPage } from "./components";
+import { MainPage } from "./component";
 
 const Main = () => {
   //
