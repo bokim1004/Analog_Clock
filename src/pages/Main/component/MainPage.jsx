@@ -7,6 +7,10 @@ const MainPage = () => {
   const [time, setTime] = useState(new Date());
   const [showToolTip, setShowToolTip] = useState(false);
 
+  const currentHour = time.getHours();
+  const currentMinute = time.getMinutes();
+  const currentTime = `${"현재" + currentHour + "시" + currentMinute + "분"}`;
+
   const refreshClock = () => {
     setTime(new Date());
   };
@@ -21,8 +25,8 @@ const MainPage = () => {
   return (
     <Wrapper>
       <ClockCircle
-        onMouseEnter={() => setShowToolTip(true)}
-        onMouseLeave={() => setShowToolTip(false)}
+        onMouseOver={() => setShowToolTip(true)}
+        onMouseOut={() => setShowToolTip(false)}
       >
         {timeArray.map((time, key) => {
           return <TimeNumber key={key}>{time}</TimeNumber>;
@@ -31,7 +35,7 @@ const MainPage = () => {
         <HourLine time={time} />
         <MinuteLine time={time} />
         <SecondLine time={time} />
-        {showToolTip && <ToolTip>{time}</ToolTip>}
+        {showToolTip && <ToolTip>{currentTime}</ToolTip>}
       </ClockCircle>
     </Wrapper>
   );
@@ -46,6 +50,7 @@ const Wrapper = styled.div`
 
 const ClockCircle = styled.div`
   position: relative;
+  margin-bottom: 0;
   margin: 200px auto;
   width: 380px;
   height: 380px;
@@ -134,7 +139,7 @@ const Circle = styled.div`
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background-color: orange;
+  background-color: #eeff00;
   left: 50%;
   top: 50%;
   z-index: 10;
@@ -146,7 +151,7 @@ const HourLine = styled.div`
   height: 60px;
   background-color: black;
   transform-origin: bottom;
-  top: 40%;
+  top: 36%;
   left: 50%;
   transform: rotateZ(${(props) => props.time?.getHours() * 30}deg);
 `;
@@ -157,8 +162,9 @@ const MinuteLine = styled.div`
   height: 100px;
   background-color: black;
   transform-origin: bottom;
-  bottom: 50%;
+  bottom: 48%;
   left: 50%;
+  z-index: 1;
   transform: rotateZ(${(props) => props.time?.getMinutes() * 6}deg);
 `;
 
@@ -166,8 +172,8 @@ const SecondLine = styled.div`
   position: absolute;
   width: 2px;
   height: 37%;
-  z-index: 2;
-  background-color: #87e4eb;
+  /* z-index: 2; */
+  background-color: #ab95f1;
   left: 50%;
   bottom: 50%;
   transform-origin: bottom;
@@ -176,6 +182,17 @@ const SecondLine = styled.div`
 
 const ToolTip = styled.div`
   position: absolute;
-  width: 50px;
-  height: 100px;
+  top: -60px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 50px;
+  font-weight: bold;
+  text-align: center;
+  background-color: yellow;
+  border-radius: 20px;
+  box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.48);
+  z-index: 12;
 `;
