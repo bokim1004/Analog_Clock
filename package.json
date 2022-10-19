@@ -21,7 +21,7 @@
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build",
     "predeploy": "npm run build",
-    "homepage": "https://bokim1004.github.io/Analog_Clock"
+    "homepage": "http://bokim1004.github.io/Analog_Clock"
   },
   "eslintConfig": {
     "extends": [
