@@ -6,10 +6,17 @@ const MainPage = () => {
 
   const [time, setTime] = useState(new Date());
   const [showToolTip, setShowToolTip] = useState(false);
+  const [x, setX] = useState();
+  const [y, setY] = useState();
 
   const currentHour = time.getHours();
   const currentMinute = time.getMinutes();
-  const currentTime = `${"현재" + currentHour + "시" + currentMinute + "분"}`;
+
+  const currentTime = `${
+    currentMinute === 0
+      ? "현재" + currentHour + "시"
+      : "현재" + currentHour + "시" + currentMinute + "분"
+  }`;
 
   const refreshClock = () => {
     setTime(new Date());
@@ -22,11 +29,17 @@ const MainPage = () => {
     };
   }, []);
 
+  const onMouseMoveEvent = (e) => {
+    setX(e.clientX - e.target.offsetLeft);
+    setY(e.clientY - e.target.offsetTop);
+  };
+
   return (
     <Wrapper>
       <ClockCircle
         onMouseOver={() => setShowToolTip(true)}
         onMouseOut={() => setShowToolTip(false)}
+        onMouseMove={onMouseMoveEvent}
       >
         {timeArray.map((time, key) => {
           return <TimeNumber key={key}>{time}</TimeNumber>;
@@ -35,7 +48,16 @@ const MainPage = () => {
         <HourLine time={time} />
         <MinuteLine time={time} />
         <SecondLine time={time} />
-        {showToolTip && <ToolTip>{currentTime}</ToolTip>}
+        {showToolTip && (
+          <ToolTip
+            style={{
+              top: y,
+              left: x,
+            }}
+          >
+            {currentTime}
+          </ToolTip>
+        )}
       </ClockCircle>
     </Wrapper>
   );
@@ -182,8 +204,6 @@ const SecondLine = styled.div`
 
 const ToolTip = styled.div`
   position: absolute;
-  top: -60px;
-  right: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
